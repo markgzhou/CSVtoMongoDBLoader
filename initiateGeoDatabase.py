@@ -1,24 +1,31 @@
 import csv
 from pymongo import MongoClient
 
+#Please configure your file here
+FILE_LOCATION='data/zipcode-database-Primary.csv'
+MONGODB_CONNECTION='localhost'
+MONGODB_PORT=27017
+
 documentCounter=0
 
 # Load city-zipcode-location csv to memory
 print("Loading CSV file...")
-with open('data/zipcode-database-Primary.csv','r') as csvfile:
+with open(FILE_LOCATION,'r') as csvfile:
     reader = csv.reader(csvfile)
     city_list = list(reader)
 print("successfully loaded "+ str(len(city_list))+" rows from CSV file.\n")
 
 print("Connecting to MongoDB...")
+
 # MongoDB connection
-client = MongoClient()
-client = MongoClient('localhost', 27017)
-db = client.gTerminal
-db.cities.drop()
+client = MongoClient(MONGODB_CONNECTION, MONGODB_PORT)
+db = client.gTerminal #DB Name
 citiesCollection = db.cities
+print("Clearing existed content...")
+citiesCollection.drop()
 
 print("Inserting records... DB:gTerminal  Collection:cities")
+
 # For each row
 for index in range(len(city_list)):
     if(index==0):
